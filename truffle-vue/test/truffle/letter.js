@@ -8,19 +8,19 @@ contract('CryptoLoveLetter', (accounts) => {
     clLetter = await CryptoLoveLetter.deployed()
   })
 
-  it('should set owner to msg.sender', async () => {
-    let owner = await clLetter.contractOwner()
-    assert(owner === accounts[0])
+  it('should set manager to msg.sender', async () => {
+    let manager = await clLetter.manager()
+    assert(manager === accounts[0])
   })
 
   it('should create new page', async () => {
     let txt = 'root1root2root3root4root5root6root7root8root9root1root2root3root4root5root6root7root8root9'
-    let length = await clLetter.getPageLength()
+    let length = await clLetter.getPagesLength()
     assert.equal(length, 0)
     await clLetter.newPage(txt,
       { from: accounts[1] }
     )
-    length = await clLetter.getPageLength()
+    length = await clLetter.getPagesLength()
     assert.equal(length, 1)
 
     let twitterId = await clLetter.getPageTwitterId(0)
@@ -40,18 +40,12 @@ contract('CryptoLoveLetter', (accounts) => {
     )
   })
 
-  it('should buy', async () => {
-    await clLetter.buy(
+  it('should write a letter', async () => {
+    let _val = web3.toWei(0.01, 'ether')
+    await clLetter.writeLetter(
       0,
-      0,
-      1,
-      1,
-      0,
-      0,
-      'nick',
       'content',
-      'link',
-      { from: accounts[1] }
+      { from: accounts[1], value: _val }
     )
   })
 
