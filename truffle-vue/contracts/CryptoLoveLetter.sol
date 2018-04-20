@@ -28,6 +28,7 @@ contract CryptoLoveLetter {
         string twitterId;
         address receiver;
         uint balance;
+        uint accumBalance;
         mapping (address => uint) shareOf;
     }
 
@@ -121,6 +122,7 @@ contract CryptoLoveLetter {
 
     function addPageValue(uint _idx) public payable {
         Page storage page = pages[_idx];
+        page.accumBalance += msg.value;
         page.balance += msg.value;
         pages[_idx].shareOf[msg.sender] = msg.value;
 
@@ -137,6 +139,10 @@ contract CryptoLoveLetter {
 
     function getPageBalance(uint _idx) public view returns (uint) {
         return pages[_idx].balance;
+    }
+
+    function getPageAccumBalance(uint _idx) public view returns (uint) {
+        return pages[_idx].accumBalance;
     }
 
     function getPageShareOf(address _user, uint _idx)
