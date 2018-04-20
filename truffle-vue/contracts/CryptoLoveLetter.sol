@@ -121,7 +121,7 @@ contract CryptoLoveLetter {
 
     function addPageValue(uint _idx) public payable {
         Page storage page = pages[_idx];
-        page.balance = msg.value;
+        page.balance += msg.value;
         pages[_idx].shareOf[msg.sender] = msg.value;
 
         emit AddPageValue(_idx, msg.sender, msg.value);
@@ -133,6 +133,18 @@ contract CryptoLoveLetter {
 
     function getPagesLength() public view returns (uint) {
         return pages.length;
+    }
+
+    function getPageBalance(uint _idx) public view returns (uint) {
+        return pages[_idx].balance;
+    }
+
+    function getPageShareOf(address _user, uint _idx)
+        public
+        view
+        returns (uint)
+    {
+        return pages[_idx].shareOf[_user];
     }
 
     function getLettersLength(uint _page_idx) public view returns (uint) {
