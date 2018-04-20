@@ -1,5 +1,10 @@
 pragma solidity ^0.4.15;
 
+/**
+ * @title CryptoLoveLetter
+ * @author M.H. Kang (https://github.com/cancue)
+ * @dev Includes managerOnly abstract Features.
+ */
 contract CryptoLoveLetter {
 
     event SetCharacterPrice(uint price);
@@ -62,6 +67,15 @@ contract CryptoLoveLetter {
         characterPrice = _price;
     }
 
+    function burnShare(uint _page_idx, address _user, uint _value)
+        external
+        managerOnly
+    {
+        uint _share = pages[_page_idx].shareOf[_user];
+        require(_share >= _value);
+        pages[_page_idx].shareOf[_user] -= _share;
+    }
+
     function setLetterScore(uint _page_idx, uint _letter_idx, uint _score)
         external
         managerOnly
@@ -99,7 +113,7 @@ contract CryptoLoveLetter {
     /* External */
 
     function newPage(string _twitterId) external returns (uint idx) {
-        Page memory page = Page(_twitterId, manager, 0);
+        Page memory page = Page(_twitterId, manager, 0, 0);
         idx = pages.push(page);
     }
 
@@ -159,6 +173,21 @@ contract CryptoLoveLetter {
 
     function getLetterContents(uint _page_idx, uint _letter_idx) public view returns (string) {
         return letters[_page_idx][_letter_idx].contents;
+    }
+
+    function getLetterInfo(uint _page_idx, uint _letter_idx, uint _key)
+        public
+        view
+        returns (address, string, uint, uint)
+    {
+        Letter storage _letter = letters[_page_idx][_letter_idx];
+
+        return (
+            _letter.owner,
+            _letter.contents,
+            _letter.score,
+            _letter.attrs[_key]
+        );
     }
 
     modifier managerOnly() {
