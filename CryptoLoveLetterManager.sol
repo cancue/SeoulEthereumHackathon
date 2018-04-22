@@ -8,7 +8,7 @@ import "./CryptoLoveLetter.sol";
  * @author M.H. Kang (https://github.com/cancue)
  * @dev It has only Upvote function now but it can be extendable to imple functions like Downvote and EmoticonAttribute.
  */
-contract CryptoLoveLetterVoting is Voting {
+contract CryptoLoveLetterManager is Voting {
 
     event UpVote(uint page_idx, uint letter_idx, uint value);
 
